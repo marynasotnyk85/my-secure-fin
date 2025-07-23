@@ -1,0 +1,35 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;       
+    font-family: sans-serif;
+    padding: 1rem;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+#controls input {
+  width: 140px;
+  padding: .25rem;
+}
+#controls button {
+  padding: .3rem .6rem;
+  cursor: pointer;
+}
+#price {
+  margin-top: 1rem;
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+canvas {
+  max-width: 600px;
+  margin-top: 1.5rem;
+}

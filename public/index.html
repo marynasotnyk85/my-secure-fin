@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf‑8">
+  <title>MySecureFinDashboard</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link rel="stylesheet" href="/styles.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/chart.js" as="script">
+</head>
+<body>
+  <h1>MySecureFinDashboard</h1>
+  <div id="controls">
+    <input id="symbol" placeholder="Ticker (e.g. AAPL)">
+    <button id="fetch">Fetch Price</button>
+  </div>
+  <div id="price"></div>
+  <canvas id="chart"></canvas>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="/app.js" defer></script>
+</body>
+</html>
