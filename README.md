@@ -3,8 +3,7 @@
 
 A security‑hardened, performance‑optimized, SEO‑friendly **financial dashboard** that fetches real‑time stock data, caches it offline, and renders it efficiently in the browser.
 
-> Built to showcase practical skills in Web Security (CORS, clickjacking, CSP), Loading & Rendering Performance (critical CSS, prefetching, service workers), and SEO.  
-> **Goal:** prove I can design, ship, and explain production‑grade front‑end + Node.js code.
+> Built to showcase practical skills in Web Security (CORS, clickjacking, CSP), Loading & Rendering Performance (critical CSS, prefetching, service workers), and SEO. 
 
 ---
 
