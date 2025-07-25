@@ -59,6 +59,51 @@ app.get('/api/price', async (req, res) => {
   }
 });
 
+app.get('/api/history', async(req, res) => {
+  const {symbol} = req.query;
+  if (!symbol) return res.status(400).json({error:'symbol is required'});
+
+  const apiKey = process.env.FIN_API_KEY;
+  if (!apiKey) return res.status(500).json({error:'FIN_API_KEY missing'});
+
+  try {
+    const {data} = await axios.get(
+      'https://www.alphavantage.co/query',
+      {
+        params: {
+          function: 'TIME_SERIES_MONTHLY',
+          symbol,
+          outputsize: 'compact',
+          apikey: apiKey,
+        }
+      }
+    );
+ // return res.json(data);
+
+
+    const series = data['Monthly Time Series'];
+       if (!series) {
+      return res.status(500).json({ error: 'No monthly series', raw: data });
+    }
+
+
+    //Convert to sort array of { date, close}
+    const points = Object.entries(series)
+    .map(([date, vals]) => ({
+      date,
+      close: parseFloat(vals['4. close'])
+    }))
+    .sort((a,b) => new Date(a.date) - new Date(b.date))
+
+    res.json({symbol, points})
+    
+  }
+  catch(err) {
+    console.error('history error: ', err.message);
+    res.status(500).json({ error: 'API error', details: err.message})
+  }
+})
+
 
 app.use(cors({
   origin: ['*'] //https://your‑fin‑domain.com'

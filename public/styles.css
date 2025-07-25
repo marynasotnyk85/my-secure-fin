@@ -30,6 +30,19 @@ h1 {
   font-weight: bold;
 }
 canvas {
+  width:auto;
   max-width: 600px;
   margin-top: 1.5rem;
+}
+
+#chartBox {
+width: 600px;
+height: 300px;
+margin-top: 1rem;
+}
+
+#history-table{
+  margin-top: 1rem; 
+  border-collapse: collapse; 
+  width: 600px;
 }
