@@ -115,7 +115,9 @@ document.getElementById('fetch').addEventListener('click', async () => {
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => { 
-  navigator.serviceWorker.register('/sw.js')
+  navigator.serviceWorker.register('/sw.js' , {
+  scope: '/my-sicure-fin/'
+})
   .then(reg => {
        console.log('ServiceWorker registered (scope:', reg.scope, ')');
 
@@ -125,6 +127,8 @@ if ('serviceWorker' in navigator) {
         newSW.addEventListener('statechange', () => {
           if ( newSW.state === 'installed') {
             if (navigator.serviceWorker.controller){
+              // Show a “Refresh to update” banner/button
+              showUpdateUI(() => window.location.reload());
               console.log('New SW installed -please refresh');
             } else {
               console.log('Sw installed for first time');

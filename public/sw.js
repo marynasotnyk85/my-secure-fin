@@ -6,17 +6,15 @@ const ASSETS = [
   '/app.js',
 ];
 
-self.addEventListener('activate', evt => {
-  // Clean up old caches
+self.addEventListener('install', evt => {
   evt.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(
-        keys.filter(k => k !== CACHE_NAME)
-            .map(k => caches.delete(k))
-      )
-    ).then(() => self.clients.claim())  // take control ASAP
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(ASSETS))
+      .then(() => self.skipWaiting())   // activate immediately
   );
 });
+
+
 
 self.addEventListener('fetch', evt => {
   const url = new URL(evt.request.url);
@@ -24,15 +22,20 @@ self.addEventListener('fetch', evt => {
   if (url.pathname.startsWith('/api/')) {
     evt.respondWith(
       fetch(evt.request)
-        .then(res => res.ok
-          ? res
-          : caches.match(evt.request) || offlineJSON()
+        .then(res => {
+           if (res.ok) {
+            const copy = res.clone();
+            caches.open(CACHE_NAME).then(cache => cache.put(evt.request, copy));
+          }
+          else caches.match(evt.request) || offlineJSON()
+        }
         )
         .catch(() =>
           caches.match(evt.request) || offlineJSON()
         )
     );
-    return;  // <-- important, don’t fall through
+    
+    return;  
   }
 
   // All other requests (HTML, CSS, JS, images):
@@ -48,4 +51,16 @@ function offlineJSON() {
     { headers:{ 'Content-Type':'application/json' } }
   );
 }
+
+self.addEventListener('activate', evt => {
+  // Clean up old caches
+  evt.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(
+        keys.filter(k => k !== CACHE_NAME)
+            .map(k => caches.delete(k))
+      )
+    ).then(() => self.clients.claim())  // take control ASAP
+  );
+});
 
