@@ -4,8 +4,25 @@ const helmet  = require('helmet');
 const cors    = require('cors');
 const app     = express();
 
+const devOrigin  = 'http://localhost:3000';
+const prodOrigin = 'https://your-fin-domain.com';
+const allowedOrigins = process.env.NODE_ENV === 'production'
+  ? [ prodOrigin ]
+  : [ devOrigin ];
+
+app.use(cors({
+  origin: allowedOrigins,
+  methods: ['GET','POST'],       
+  credentials: false, // true -> if you need cookies/auth
+}));
+
+app.use((req, res, next) => {
+  res.set('X-Frame-Options', 'DENY');
+  next();
+});
+
+
 // Security headers 
-//app.use(helmet());
 app.use(helmet({
   contentSecurityPolicy: {
     useDefaults: true,
@@ -105,13 +122,5 @@ app.get('/api/history', async(req, res) => {
 })
 
 
-app.use(cors({
-  origin: ['*'] //https://your‑fin‑domain.com'
-}));
-
-app.use((req, res, next) => {
-  res.set('X-Frame-Options', 'DENY');
-  next();
-});
 
 
